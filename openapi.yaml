@@ -1,0 +1,712 @@
+openapi: 3.1.0
+info:
+  title: My LMS API
+  version: 1.0.1
+
+tags:
+  - name: Courses
+    description: Управление курсами
+  - name: Materials
+    description: Управление материалами курса
+  - name: Quizzes
+    description: Управление тестами
+
+paths:
+  '/courses':
+    get:
+      tags:
+        - Courses
+      summary: Получить список курсов
+      description: Возвращает список всех доступных курсов
+      responses:
+        '200':
+          description: Список курсов успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  - $ref: '#/components/schemas/Course'
+    post:
+      tags:
+        - Courses
+      summary: Создать новый курс
+      description: Добавляет новый курс в систему
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '201':
+          description: Курс успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '400':
+          description: Ошибка валидации запроса
+
+  '/courses/{id}':
+    get:
+      tags:
+        - Courses
+      summary: Получить курс по ID
+      description: Возвращает информацию о курсе по указанному ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор курса
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Информация о курсе успешно получена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Курс не найден
+    put:
+      tags:
+        - Courses
+      summary: Обновить курс
+      description: Обновляет данные курса по указанному ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор курса
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '200':
+          description: Курс успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Курс не найден
+    delete:
+      tags:
+        - Courses
+      summary: Удалить курс
+      description: Удаляет курс по указанному ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор курса
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Курс успешно удален
+        '404':
+          description: Курс не найден
+
+  '/materials':
+    post:
+      tags:
+        - Materials
+      summary: Создать новый материал
+      description: Добавляет материал в существующий раздел курса
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Material'
+      responses:
+        '201':
+          description: Материал успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Material'
+        '400':
+          description: Ошибка валидации запроса
+
+  '/materials/{id}':
+    put:
+      tags:
+        - Materials
+      summary: Обновить материал
+      description: Обновляет существующий материал
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор материала
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Material'
+      responses:
+        '200':
+          description: Материал успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Material'
+        '400':
+          description: Ошибка валидации запроса
+        '404':
+          description: Материал не найден
+    delete:
+      tags:
+        - Materials
+      summary: Удалить материал
+      description: Удаляет существующий материал
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор материала
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Материал успешно удален
+        '400':
+          description: Ошибка валидации запроса
+        '404':
+          description: Материал не найден
+
+  '/quizzes':
+    get:
+      tags:
+        - Quizzes
+      summary: Получить список тестов
+      description: Возвращает список всех тестов
+      responses:
+        '200':
+          description: Список тестов успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  - $ref: '#/components/schemas/Quiz'
+    post:
+      tags:
+        - Quizzes
+      summary: Создать новый тест
+      description: Добавляет новый тест в систему
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Quiz'
+      responses:
+        '201':
+          description: Тест успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+        '400':
+          description: Ошибка валидации запроса
+
+  '/quizzes/{id}':
+    delete:
+      tags:
+        - Quizzes
+      summary: Удалить тест
+      description: Удаляет тест по указанному ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор теста
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Тест успешно удален
+        '404':
+          description: Тест не найден
+    put:
+      tags:
+        - Quizzes
+      summary: Обновляет тест
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор теста
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Quiz'
+      responses:
+        '404':
+          description: Тест не найден
+        '200':
+          description: Тест успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quiz'
+
+  '/quizzes/{id}/questions':
+    get:
+      tags:
+        - Quizzes
+      summary: Получение вопросов теста
+      description: Получение вопросов в тесте
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор теста
+          schema:
+            type: integer
+      responses:
+        '404':
+          description: Тест не найден
+        '200':
+          description: Список вопросов получен успешно
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  - $ref: '#/components/schemas/Question'
+    post:
+      tags:
+        - Quizzes
+      summary: Добавить вопрос в тест
+      description: Добавляет вопрос в тест по его ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор теста
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '201':
+          description: Вопрос успешно добавлен в тест
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '404':
+          description: Тест не найден
+
+  '/quizzes/{quizId}/questions/{questionId}':
+    put:
+      tags:
+        - Quizzes
+      summary: Обновить вопрос
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          description: Уникальный идентификатор теста
+          schema:
+            type: integer
+        - name: questionId
+          in: path
+          required: true
+          description: Уникальный идентификатор вопроса
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '200':
+          description: Вопрос успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '404':
+          description: Вопрос или тест не найден
+
+    delete:
+      tags:
+        - Quizzes
+      summary: Удалить вопрос из теста
+      description: Удаляет вопрос по указанному ID теста и вопроса
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          description: Уникальный идентификатор теста
+          schema:
+            type: integer
+        - name: questionId
+          in: path
+          required: true
+          description: Уникальный идентификатор вопроса
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Вопрос успешно удален
+        '404':
+          description: Вопрос или тест не найден
+
+  '/quiz_attempts':
+    get:
+      tags:
+        - Quizzes
+      summary: Получить список попыток прохождения тестов
+      description: Возвращает все попытки прохождения тестов
+      responses:
+        '200':
+          description: Список попыток успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  - $ref: '#/components/schemas/QuizAttempt'
+
+    post:
+      tags:
+        - Quizzes
+      summary: Начать прохождение теста
+      description: Создаёт новую попытку прохождения теста для пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quizId:
+                  type: integer
+                  description: Идентификатор теста
+              required:
+                - quizId
+      responses:
+        '201':
+          description: Попытка прохождения успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizAttempt'
+
+  '/quiz_attempts/{attemptId}':
+    get:
+      tags:
+        - Quizzes
+      summary: Получить данные о попытке
+      description: Возвращает данные конкретной попытки прохождения теста
+      parameters:
+        - name: attemptId
+          in: path
+          required: true
+          description: Уникальный идентификатор попытки
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Данные о попытке успешно получены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizAttempt'
+        '404':
+          description: Попытка не найдена
+
+    put:
+      tags:
+        - Quizzes
+      summary: Дополнить попытку прохождения
+      description: Обновляет данные попытки
+      parameters:
+        - name: attemptId
+          in: path
+          required: true
+          description: Уникальный идентификатор попытки
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answers:
+                  type: array
+                  description: Ответы на вопросы
+                  items:
+                    - $ref: '#/components/schemas/Answer'
+              required:
+                - answers
+      responses:
+        '200':
+          description: Попытка успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizAttempt'
+        '404':
+          description: Попытка не найдена
+
+  '/quiz_attempts/{attemptId}/complete':
+    post:
+      tags:
+        - Quizzes
+      summary: Завершить попытку прохождения теста
+      description: Устанавливает время завершения попытки и завершает её
+      parameters:
+        - name: attemptId
+          in: path
+          required: true
+          description: Уникальный идентификатор попытки
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Попытка успешно завершена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizAttempt'
+        '404':
+          description: Попытка не найдена
+
+components:
+  schemas:
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор курса
+          readOnly: true
+        name:
+          type: string
+          description: Название курса
+        description:
+          type: string
+          description: Описание курса
+        sections:
+          type: array
+          description: Список разделов в модуле
+          items:
+            - $ref: '#/components/schemas/Section'
+      required:
+        - id
+        - name
+        - description
+
+    Section:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор раздела
+          readOnly: true
+        name:
+          type: string
+          description: Название раздела
+        materials:
+          type: array
+          readOnly: true
+          description: Список материалов в разделе
+          items:
+            - $ref: '#/components/schemas/Material'
+        quizes:
+          type: array
+          readOnly: true
+          description: Список тестов в разделе
+          items:
+            - $ref: '#/components/schemas/Quiz'
+      required:
+        - id
+        - name
+
+    Material:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор материала
+          readOnly: true
+        sectionId:
+          type: integer
+          description: Идентификатор раздела, в котором размещен материал
+          writeOnly: true
+        type:
+          type: string
+          enum:
+            - 'text'
+            - 'url'
+          description: Тип материала
+        content:
+          type: string
+          description: Содержимое материала
+      required:
+        - id
+        - type
+        - content
+        - sectionId
+
+    Quiz:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор теста
+          readOnly: true
+        sectionId:
+          type: integer
+          description: Идентификатор раздела, в котором размещен тест
+          writeOnly: true
+        title:
+          type: string
+          description: Название теста
+        questions:
+          type: array
+          writeOnly: true
+          description: Список вопросов в тесте
+          items:
+            - $ref: '#/components/schemas/Question'
+      required:
+        - id
+        - title
+
+    QuestionOpen:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор вопроса
+          readOnly: true
+        text:
+          type: string
+          description: Текст вопроса
+        type:
+          type: string
+          const: open
+          description: Тип вопроса
+        answer:
+          type: string
+          description: Варианты ответа
+      required:
+        - id
+        - text
+        - type
+
+    QuestionChoice:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор вопроса
+          readOnly: true
+        text:
+          type: string
+          description: Текст вопроса
+        type:
+          type: string
+          enum:
+            - multiple_choice
+            - single_choice
+          description: Тип вопроса
+        options:
+          type: array
+          description: Варианты ответа
+          items:
+            type: string
+      required:
+        - id
+        - text
+        - type
+
+    Question:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          open: '#/components/schemas/QuestionOpen'
+          multiple_choice: '#/components/schemas/QuestionChoice'
+          single_choice: '#/components/schemas/QuestionChoice'
+      oneOf:
+        - $ref: '#/components/schemas/QuestionOpen'
+        - $ref: '#/components/schemas/QuestionChoice'
+
+    QuizAttempt:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор попытки прохождения теста
+          readOnly: true
+        quizId:
+          type: integer
+          description: Идентификатор теста
+        userId:
+          type: integer
+          description: Идентификатор пользователя, который проходит тест
+        answers:
+          type: array
+          description: Ответы на вопросы теста
+          items:
+            - $ref: '#/components/schemas/Answer'
+        startTime:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Время начала попытки
+        endTime:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Время завершения попытки
+          nullable: true
+      required:
+        - id
+        - quizId
+        - userId
+        - answers
+        - startTime
+
+    Answer:
+      type: object
+      properties:
+        questionId:
+          type: integer
+          description: Идентификатор вопроса, на который дан ответ
+        answer:
+          type: string
+          description: Ответ на вопрос
+      required:
+        - questionId
+        - answer
